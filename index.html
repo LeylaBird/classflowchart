@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Payroll Flowchart</title>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; margin: 16px; background:#f7f9fc; color:#222; }
+  h1 { font-size:20px; margin-bottom:8px; }
+  p { margin-top:0; margin-bottom:16px; color:#444; }
+  .canvas { background: white; border: 1px solid #ddd; border-radius:6px; padding:12px; overflow:auto; }
+  svg { display:block; max-width:100%; height:auto; }
+  .node { fill:#fff; stroke:#2b6cb0; stroke-width:2px; }
+  .node-text { font-size:13px; fill:#0b2340; pointer-events:none; }
+  .decision { fill:#fffbe6; stroke:#d69e2e; stroke-width:2px; }
+  .connector { stroke:#2b6cb0; stroke-width:2px; fill:none; marker-end: url(#arrow); }
+  .small { font-size:12px; fill:#334155; }
+  .note { font-size:12px; fill:#475569; }
+  /* responsive: center svg in container */
+  .svg-wrap { display:flex; justify-content:center; }
+  /* print friendly */
+  @media print {
+    body { background: white; }
+    .canvas { border: none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<h1>Payroll Flowchart — Visual Display</h1>
+<p>This page displays the payroll flowchart described in your steps. To save a PDF: use your browser's Print → Save as PDF.</p>
+
+<div class="canvas svg-wrap" role="img" aria-label="Payroll flowchart diagram">
+<svg width="900" height="1200" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" >
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2b6cb0" />
+    </marker>
+  </defs>
+
+  <!-- Start (oval) -->
+  <ellipse class="node" cx="450" cy="60" rx="110" ry="28" />
+  <text class="node-text" x="450" y="65" text-anchor="middle" dominant-baseline="middle">Start</text>
+
+  <!-- Input numEmployees -->
+  <rect class="node" x="240" y="120" width="420" height="42" rx="6" ry="6" />
+  <text class="node-text" x="450" y="146" text-anchor="middle" dominant-baseline="middle">Input number of employees (numEmployees)</text>
+
+  <!-- Initialize counter -->
+  <rect class="node" x="240" y="190" width="420" height="42" rx="6" ry="6" />
+  <text class="node-text" x="450" y="216" text-anchor="middle" dominant-baseline="middle">Initialize counter i = 0</text>
+
+  <!-- Loop decision i < numEmployees? -->
+  <polygon class="decision" points="450,270 520,320 450,370 380,320" />
+  <text class="node-text" x="450" y="320" text-anchor="middle" dominant-baseline="middle">i &lt; numEmployees?</text>
+  <text class="small" x="575" y="322">Yes → continue</text>
+  <text class="small" x="300" y="322">No → End</text>
+
+  <!-- Loop body group: inputs and processing -->
+  <!-- EmpID -->
+  <rect class="node" x="120" y="430" width="660" height="44" rx="6" ry="6" />
+  <text class="node-text" x="450" y="458" text-anchor="middle" dominant-baseline="middle">Input Employee ID (empID)</text>
+
+  <!-- hourlyRate -->
+  <rect class="node" x="120" y="500" width="660" height="44" rx="6" ry="6" />
+  <text class="node-text" x="450" y="528" text-anchor="middle" dominant-baseline="middle">Input Hourly Pay Rate (hourlyRate)</text>
+
+  <!-- hoursWorked -->
+  <rect class="node" x="120" y="570" width="660" height="44" rx="6" ry="6" />
+  <text class="node-text" x="450" y="598" text-anchor="middle" dominant-baseline="middle">Input Hours Worked (hoursWorked)</text>
+
+  <!-- Decision: hoursWorked > 40? -->
+  <polygon class="decision" points="450,660 520,710 450,760 380,710" />
+  <text class="node-text" x="450" y="710" text-anchor="middle" dominant-baseline="middle">hoursWorked &gt; 40 ?</text>
+  <text class="small" x="585" y="712">Yes</text>
+  <text class="small" x="300" y="712">No</text>
+
+  <!-- Yes branch (overtime calculations) -->
+  <rect class="node" x="540" y="780" width="300" height="36" rx="6" ry="6" />
+  <text class="node-text" x="690" y="798" text-anchor="middle" dominant-baseline="middle">regularPay = 40 * hourlyRate</text>
+
+  <rect class="node" x="540" y="830" width="300" height="36" rx="6" ry="6" />
+  <text class="node-text" x="690" y="848" text-anchor="middle" dominant-baseline="middle">overtimePay = (hoursWorked-40)*hourlyRate*1.5</text>
+
+  <rect class="node" x="540" y="880" width="300" height="36" rx="6" ry="6" />
+  <text class="node-text" x="690" y="898" text-anchor="middle" dominant-baseline="middle">grossPay = regularPay + overtimePay</text>
+
+  <!-- No branch (straight gross pay) -->
+  <rect class="node" x="60" y="800" width="320" height="36" rx="6" ry="6" />
+  <text class="node-text" x="220" y="818" text-anchor="middle" dominant-baseline="middle">grossPay = hoursWorked * hourlyRate</text>
+
+  <!-- After branches join: withholding and net pay -->
+  <rect class="node" x="240" y="960" width="420" height="44" rx="6" ry="6" />
+  <text class="node-text" x="450" y="988" text-anchor="middle" dominant-baseline="middle">
+    withholdingTax = grossPay * 0.03525  |  netPay = grossPay - withholdingTax
+  </text>
+
+  <!-- Output results -->
+  <rect class="node" x="240" y="1030" width="420" height="60" rx="6" ry="6" />
+  <text class="node-text" x="450" y="1055" text-anchor="middle" dominant-baseline="middle">
+    Output: Employee ID, Hours Worked, Gross Pay, Withholding Tax, Net Pay
+  </text>
+
+  <!-- Increment i -->
+  <rect class="node" x="240" y="1110" width="420" height="40" rx="6" ry="6" />
+  <text class="node-text" x="450" y="1130" text-anchor="middle" dominant-baseline="middle">Increment i = i + 1</text>
+
+  <!-- End -->
+  <ellipse class="node" cx="450" cy="1180" rx="110" ry="26" />
+  <text class="node-text" x="450" y="1184" text-anchor="middle" dominant-baseline="middle">End</text>
+
+  <!-- Connectors -->
+  <!-- Start -> Input numEmployees -->
+  <path class="connector" d="M450,88 L450,120" />
+  <!-- numEmployees -> i=0 -->
+  <path class="connector" d="M450,162 L450,190" />
+  <!-- i < numEmployees decision -->
+  <path class="connector" d="M450,232 L450,270" />
+  <!-- decision Yes branch down to EmpID -->
+  <path class="connector" d="M470,320 L470,430" />
+  <!-- decision No branch to End -->
+  <path class="connector" d="M430,320 L280,320 L280,1180" />
+  <!-- From empID -> hourlyRate -> hoursWorked -->
+  <path class="connector" d="M450,212 L450,430" stroke-dasharray="4 2" /> <!-- visual guide from decision to empID -->
+  <path class="connector" d="M450,472 L450,500" />
+  <path class="connector" d="M450,542 L450,570" />
+  <!-- hoursWorked -> hoursWorked>40 decision -->
+  <path class="connector" d="M450,614 L450,660" />
+
+  <!-- Decision Yes -> overtime steps -->
+  <path class="connector" d="M490,760 L640,760 L640,780" />
+  <path class="connector" d="M690,816 L690,830" />
+  <path class="connector" d="M690,866 L690,880" />
+  <!-- Decision No -> straight grossPay -->
+  <path class="connector" d="M410,760 L200,760 L200,800" />
+
+  <!-- Both branches -> withholding tax (join arrows) -->
+  <path class="connector" d="M690,916 L690,960 L530,960" />
+  <path class="connector" d="M200,836 L200,960 L530,960" />
+
+  <!-- withholding -> output -->
+  <path class="connector" d="M450,1004 L450,1030" />
+
+  <!-- output -> increment -> loop back to decision -->
+  <path class="connector" d="M450,1090 L450,1110" />
+  <path class="connector" d="M450,1150 L450,1160 L450,1180" stroke-dasharray="2 3" />
+
+  <!-- increment -> loop back arrow to decision (left then up) -->
+  <path class="connector" d="M450,1148 L450,1148 L750,1148" /> <!-- stub to right (visual balance) -->
+  <path class="connector" d="M450,1130 L450,1180" /> <!-- small down to End already present -->
+
+  <!-- A more clear loop-back from increment to decision: -->
+  <path class="connector" d="M240,1110 L120,1110 L120,380 L380,380" />
+  <path class="connector" d="M380,380 L380,320" />
+
+  <!-- labels for key formulas as small legend -->
+  <rect x="16" y="16" width="240" height="120" rx="6" ry="6" fill="#ffffff" stroke="#e2e8f0" />
+  <text class="note" x="28" y="36">Key formulas / notes:</text>
+  <text class="small" x="28" y="56">regularPay = 40 * hourlyRate</text>
+  <text class="small" x="28" y="74">overtimePay = (hours-40)*hourlyRate*1.5</text>
+  <text class="small" x="28" y="92">withholdingTax = grossPay * 0.03525</text>
+  <text class="small" x="28" y="110">netPay = grossPay - withholdingTax</text>
+</svg>
+</div>
+
+<p style="margin-top:12px">If you'd like, I can:
+- produce a printable PDF of this exact page, or
+- provide a version that auto-generates the flowchart from the textual steps (JSON → diagram).
+Tell me which one and I will create it next.</p>
+
+</body>
+</html>
